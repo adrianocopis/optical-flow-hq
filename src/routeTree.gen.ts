@@ -9,8 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RelatoriosRouteImport } from './routes/relatorios'
+import { Route as GargalosRouteImport } from './routes/gargalos'
+import { Route as DemandasFixasRouteImport } from './routes/demandas-fixas'
+import { Route as DemandasRouteImport } from './routes/demandas'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as ArquivosRouteImport } from './routes/arquivos'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RelatoriosRoute = RelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GargalosRoute = GargalosRouteImport.update({
+  id: '/gargalos',
+  path: '/gargalos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemandasFixasRoute = DemandasFixasRouteImport.update({
+  id: '/demandas-fixas',
+  path: '/demandas-fixas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemandasRoute = DemandasRouteImport.update({
+  id: '/demandas',
+  path: '/demandas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArquivosRoute = ArquivosRouteImport.update({
+  id: '/arquivos',
+  path: '/arquivos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +55,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/arquivos': typeof ArquivosRoute
+  '/calendario': typeof CalendarioRoute
+  '/demandas': typeof DemandasRoute
+  '/demandas-fixas': typeof DemandasFixasRoute
+  '/gargalos': typeof GargalosRoute
+  '/relatorios': typeof RelatoriosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/arquivos': typeof ArquivosRoute
+  '/calendario': typeof CalendarioRoute
+  '/demandas': typeof DemandasRoute
+  '/demandas-fixas': typeof DemandasFixasRoute
+  '/gargalos': typeof GargalosRoute
+  '/relatorios': typeof RelatoriosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/arquivos': typeof ArquivosRoute
+  '/calendario': typeof CalendarioRoute
+  '/demandas': typeof DemandasRoute
+  '/demandas-fixas': typeof DemandasFixasRoute
+  '/gargalos': typeof GargalosRoute
+  '/relatorios': typeof RelatoriosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/arquivos'
+    | '/calendario'
+    | '/demandas'
+    | '/demandas-fixas'
+    | '/gargalos'
+    | '/relatorios'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/arquivos'
+    | '/calendario'
+    | '/demandas'
+    | '/demandas-fixas'
+    | '/gargalos'
+    | '/relatorios'
+  id:
+    | '__root__'
+    | '/'
+    | '/arquivos'
+    | '/calendario'
+    | '/demandas'
+    | '/demandas-fixas'
+    | '/gargalos'
+    | '/relatorios'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArquivosRoute: typeof ArquivosRoute
+  CalendarioRoute: typeof CalendarioRoute
+  DemandasRoute: typeof DemandasRoute
+  DemandasFixasRoute: typeof DemandasFixasRoute
+  GargalosRoute: typeof GargalosRoute
+  RelatoriosRoute: typeof RelatoriosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/relatorios': {
+      id: '/relatorios'
+      path: '/relatorios'
+      fullPath: '/relatorios'
+      preLoaderRoute: typeof RelatoriosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gargalos': {
+      id: '/gargalos'
+      path: '/gargalos'
+      fullPath: '/gargalos'
+      preLoaderRoute: typeof GargalosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demandas-fixas': {
+      id: '/demandas-fixas'
+      path: '/demandas-fixas'
+      fullPath: '/demandas-fixas'
+      preLoaderRoute: typeof DemandasFixasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demandas': {
+      id: '/demandas'
+      path: '/demandas'
+      fullPath: '/demandas'
+      preLoaderRoute: typeof DemandasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arquivos': {
+      id: '/arquivos'
+      path: '/arquivos'
+      fullPath: '/arquivos'
+      preLoaderRoute: typeof ArquivosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +177,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArquivosRoute: ArquivosRoute,
+  CalendarioRoute: CalendarioRoute,
+  DemandasRoute: DemandasRoute,
+  DemandasFixasRoute: DemandasFixasRoute,
+  GargalosRoute: GargalosRoute,
+  RelatoriosRoute: RelatoriosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
