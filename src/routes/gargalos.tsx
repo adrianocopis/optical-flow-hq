@@ -25,8 +25,11 @@ export const Route = createFileRoute("/gargalos")({
 });
 
 function Page() {
-  const { demandas } = useDemandas();
+  const { demandas: allDemandas } = useDemandas();
   const { metas } = useMetas();
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+  const demandas = allDemandas.filter((d) => demandaInRange(d, range));
 
   const atrasos = demandas.filter((d) => d.status === "Atrasado");
   const bloqueios = demandas.filter((d) => d.status === "Bloqueado");
@@ -45,7 +48,9 @@ function Page() {
       <PageHeader
         title="Gargalos"
         subtitle="Diagnóstico operacional — onde a operação está travando e quem está envolvido."
+        actions={<PeriodFilter value={period} onChange={setPeriod} />}
       />
+
 
       <div className="grid gap-4 md:grid-cols-3">
         <Tile
