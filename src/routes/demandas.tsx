@@ -77,12 +77,6 @@ function Page() {
         return false;
       return true;
     });
-
-      if (filterPrior !== "todos" && d.prioridade !== filterPrior) return false;
-      if (q && !`${d.titulo} ${d.descricao}`.toLowerCase().includes(q.toLowerCase()))
-        return false;
-      return true;
-    });
     const prOrder: Priority[] = ["crítica", "alta", "média", "baixa"];
     r.sort((a, b) => {
       if (sortBy === "prazo") return +new Date(a.prazo) - +new Date(b.prazo);
@@ -91,7 +85,8 @@ function Page() {
       return prOrder.indexOf(a.prioridade) - prOrder.indexOf(b.prioridade);
     });
     return r;
-  }, [demandas, q, filterSetor, filterStatus, filterPrior, sortBy]);
+  }, [demandas, q, filterSetor, filterStatus, filterPrior, sortBy, range]);
+
 
   return (
     <>
