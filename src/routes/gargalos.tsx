@@ -1,7 +1,15 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertOctagon, Ban, Clock } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { useDemandas, useMetas } from "@/lib/store";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/gargalos")({
   head: () => ({
