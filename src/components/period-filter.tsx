@@ -229,8 +229,11 @@ export function PeriodFilter({
   );
 }
 
-export const defaultPeriod = {
-  preset: "todos" as PeriodPreset,
-  from: undefined,
-  to: undefined,
+export const defaultPeriod: {
+  preset: PeriodPreset;
+  from?: string;
+  to?: string;
+} = {
+  preset: "todos",
 };
+
