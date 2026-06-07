@@ -67,8 +67,9 @@ export interface MetaFixa {
   responsavelBloqueio?: string;
 }
 
-const DEMANDAS_KEY = "optical-demandas";
-const METAS_KEY = "optical-metas";
+const DEMANDAS_KEY = "optical-demandas-v2";
+const METAS_KEY = "optical-metas-v2";
+
 
 function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
