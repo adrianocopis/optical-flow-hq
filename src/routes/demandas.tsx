@@ -94,16 +94,20 @@ function Page() {
         title="Demandas"
         subtitle="Sistema completo de gerenciamento. Filtros, prioridades, status e upload de arquivos."
         actions={
-          <Button
-            onClick={() => {
-              setEditing(null);
-              setOpen(true);
-            }}
-            className="rounded-full"
-          >
-            <Plus className="h-4 w-4" /> Nova demanda
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <PeriodFilter value={period} onChange={setPeriod} />
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setOpen(true);
+              }}
+              className="rounded-full"
+            >
+              <Plus className="h-4 w-4" /> Nova demanda
+            </Button>
+          </div>
         }
+
       />
 
       {/* Toolbar */}
