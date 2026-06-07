@@ -35,8 +35,11 @@ export const Route = createFileRoute("/relatorios")({
 });
 
 function Page() {
-  const { demandas } = useDemandas();
+  const { demandas: allDemandas } = useDemandas();
   const { metas } = useMetas();
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+  const demandas = allDemandas.filter((d) => demandaInRange(d, range));
 
   const setores = ["Design", "Web Design", "Vídeo"].map((s) => ({
     setor: s,
@@ -48,14 +51,16 @@ function Page() {
     ).length,
   }));
 
-  const perf = Math.round(
-    (metas.reduce(
-      (a, m) => a + Math.min(1, m.realizado / Math.max(m.meta, 1)),
-      0,
-    ) /
-      Math.max(metas.length, 1)) *
-      100,
-  );
+  const perf = metas.length
+    ? Math.round(
+        (metas.reduce(
+          (a, m) => a + Math.min(1, m.realizado / Math.max(m.meta, 1)),
+          0,
+        ) /
+          metas.length) *
+          100,
+      )
+    : 0;
 
   return (
     <>
@@ -63,18 +68,20 @@ function Page() {
         title="Relatórios"
         subtitle="Visão executiva — produtividade, metas, gargalos e eficiência operacional."
         actions={
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <PeriodFilter value={period} onChange={setPeriod} />
             <Button variant="outline" className="rounded-full" onClick={() => window.print()}>
               <Printer className="h-4 w-4" />
               Imprimir
             </Button>
-            <Button className="rounded-full">
+            <Button className="rounded-full" onClick={() => window.print()}>
               <Download className="h-4 w-4" />
               Exportar PDF
             </Button>
           </div>
         }
       />
+
 
       <div className="grid gap-4 md:grid-cols-4">
         <KPI label="Performance" value={`${perf}%`} />
