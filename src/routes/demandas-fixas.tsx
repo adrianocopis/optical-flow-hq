@@ -4,6 +4,7 @@ import { Flame, Lock, Plus, Minus, AlertCircle } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { useMetas, type MetaFixa } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { PeriodFilter, defaultPeriod } from "@/components/period-filter";
 
 export const Route = createFileRoute("/demandas-fixas")({
   head: () => ({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/demandas-fixas")({
 
 function Page() {
   const { metas, update } = useMetas();
+  const [period, setPeriod] = React.useState(defaultPeriod);
   const semanais = metas.filter((m) => m.periodo === "semanal");
   const mensais = metas.filter((m) => m.periodo !== "semanal");
 
@@ -28,15 +30,37 @@ function Page() {
       <PageHeader
         title="Demandas Fixas"
         subtitle="Metas recorrentes — progresso visual, metas superadas e bloqueios."
+        actions={<PeriodFilter value={period} onChange={setPeriod} />}
       />
 
-      <Group title="Semanais" metas={semanais} update={update} />
-      <div className="mt-10">
-        <Group title="Mensais" metas={mensais} update={update} />
-      </div>
+      {metas.length === 0 ? (
+        <EmptyMetas />
+      ) : (
+        <>
+          <Group title="Semanais" metas={semanais} update={update} />
+          <div className="mt-10">
+            <Group title="Mensais" metas={mensais} update={update} />
+          </div>
+        </>
+      )}
     </>
   );
 }
+
+function EmptyMetas() {
+  return (
+    <div className="neo-card flex flex-col items-center rounded-2xl px-6 py-20 text-center">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+        <Flame className="h-5 w-5 text-muted-foreground" />
+      </div>
+      <h3 className="text-sm font-medium">Nenhuma demanda fixa cadastrada</h3>
+      <p className="mt-1 max-w-sm text-xs text-muted-foreground">
+        Cadastre metas recorrentes para acompanhar o progresso aqui.
+      </p>
+    </div>
+  );
+}
+
 
 function Group({
   title,
