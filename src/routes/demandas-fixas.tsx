@@ -91,11 +91,14 @@ function Group({
   title,
   metas,
   update,
+  remove,
 }: {
   title: string;
   metas: MetaFixa[];
   update: (id: string, p: Partial<MetaFixa>) => void;
+  remove: (id: string) => void;
 }) {
+  if (metas.length === 0) return null;
   return (
     <section>
       <div className="mb-5 flex items-baseline justify-between">
@@ -109,7 +112,7 @@ function Group({
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {metas.map((m) => (
-          <MetaCard key={m.id} m={m} update={update} />
+          <MetaCard key={m.id} m={m} update={update} remove={remove} />
         ))}
       </div>
     </section>
@@ -119,14 +122,17 @@ function Group({
 function MetaCard({
   m,
   update,
+  remove,
 }: {
   m: MetaFixa;
   update: (id: string, p: Partial<MetaFixa>) => void;
+  remove: (id: string) => void;
 }) {
   const pct = Math.round((m.realizado / Math.max(m.meta, 1)) * 100);
   const superada = pct > 100;
   const completa = pct >= 100;
   const [showBloqueio, setShowBloqueio] = React.useState(!!m.bloqueada);
+
 
   return (
     <div
