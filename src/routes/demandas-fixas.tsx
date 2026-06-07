@@ -335,3 +335,115 @@ function BloqueioForm({
     </div>
   );
 }
+
+function NovaMetaDialog({
+  onClose,
+  onSave,
+}: {
+  onClose: () => void;
+  onSave: (m: Omit<MetaFixa, "id">) => void;
+}) {
+  const [titulo, setTitulo] = React.useState("");
+  const [setor, setSetor] = React.useState<MetaFixa["setor"]>("Design");
+  const [meta, setMeta] = React.useState(1);
+  const [periodo, setPeriodo] =
+    React.useState<MetaFixa["periodo"]>("semanal");
+
+  const setores: MetaFixa["setor"][] = [...SECTORS, "Presencial"];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="neo-card relative w-full max-w-md rounded-3xl p-7 shadow-2xl animate-in zoom-in-95 duration-200">
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 rounded-lg p-2 text-muted-foreground hover:bg-secondary"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <h2 className="text-lg font-semibold tracking-tight">Nova meta fixa</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Cadastre uma meta recorrente para acompanhar manualmente.
+        </p>
+
+        <div className="mt-6 space-y-4">
+          <label className="block space-y-1.5">
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              Título
+            </span>
+            <input
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+              className="h-10 w-full rounded-xl border border-border bg-surface/60 px-3 text-sm outline-none focus:border-foreground/40"
+              placeholder="Ex.: Criativos semanais"
+            />
+          </label>
+
+          <div className="grid grid-cols-2 gap-3">
+            <label className="block space-y-1.5">
+              <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                Setor
+              </span>
+              <select
+                value={setor}
+                onChange={(e) => setSetor(e.target.value as Sector | "Presencial")}
+                className="h-10 w-full rounded-xl border border-border bg-surface/60 px-3 text-sm outline-none"
+              >
+                {setores.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                Período
+              </span>
+              <select
+                value={periodo}
+                onChange={(e) =>
+                  setPeriodo(e.target.value as MetaFixa["periodo"])
+                }
+                className="h-10 w-full rounded-xl border border-border bg-surface/60 px-3 text-sm outline-none"
+              >
+                <option value="diário">diário</option>
+                <option value="semanal">semanal</option>
+                <option value="mensal">mensal</option>
+              </select>
+            </label>
+          </div>
+
+          <label className="block space-y-1.5">
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              Meta numérica
+            </span>
+            <input
+              type="number"
+              min={1}
+              value={meta}
+              onChange={(e) => setMeta(Math.max(1, Number(e.target.value) || 1))}
+              className="h-10 w-full rounded-xl border border-border bg-surface/60 px-3 text-sm outline-none focus:border-foreground/40"
+            />
+          </label>
+        </div>
+
+        <div className="mt-7 flex justify-end gap-2">
+          <Button variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => {
+              if (!titulo.trim()) {
+                toast.error("Informe um título");
+                return;
+              }
+              onSave({ titulo, setor, meta, realizado: 0, periodo });
+            }}
+          >
+            Criar meta
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
