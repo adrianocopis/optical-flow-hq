@@ -25,6 +25,13 @@ import {
 } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/demandas")({
   head: () => ({
