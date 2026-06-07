@@ -161,7 +161,20 @@ function MetaCard({
             Bloqueada
           </span>
         )}
+        <button
+          onClick={() => {
+            if (confirm("Remover esta meta?")) {
+              remove(m.id);
+              toast.success("Meta removida");
+            }
+          }}
+          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          aria-label="Remover meta"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       </div>
+
 
       <div className="mt-6">
         <div className="flex items-baseline justify-between">
