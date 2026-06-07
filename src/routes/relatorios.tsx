@@ -1,3 +1,4 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ResponsiveContainer,
@@ -12,6 +13,13 @@ import { Download, Printer, FileText } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { useDemandas, useMetas } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/relatorios")({
   head: () => ({
