@@ -64,10 +64,20 @@ function Page() {
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<Demanda | null>(null);
 
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+
   const filtered = React.useMemo(() => {
     let r = demandas.filter((d) => {
+      if (!demandaInRange(d, range)) return false;
       if (filterSetor !== "todos" && d.setor !== filterSetor) return false;
       if (filterStatus !== "todos" && d.status !== filterStatus) return false;
+      if (filterPrior !== "todos" && d.prioridade !== filterPrior) return false;
+      if (q && !`${d.titulo} ${d.descricao}`.toLowerCase().includes(q.toLowerCase()))
+        return false;
+      return true;
+    });
+
       if (filterPrior !== "todos" && d.prioridade !== filterPrior) return false;
       if (q && !`${d.titulo} ${d.descricao}`.toLowerCase().includes(q.toLowerCase()))
         return false;
