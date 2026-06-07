@@ -1,10 +1,12 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Flame, Lock, Plus, Minus, AlertCircle } from "lucide-react";
+import { Flame, Lock, Plus, Minus, AlertCircle, Trash2, X } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
-import { useMetas, type MetaFixa } from "@/lib/store";
+import { useMetas, SECTORS, type MetaFixa, type Sector } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { PeriodFilter, defaultPeriod } from "@/components/period-filter";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/demandas-fixas")({
   head: () => ({
