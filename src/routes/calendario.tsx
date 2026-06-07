@@ -52,7 +52,11 @@ function fmt(d: Date) {
 }
 
 function Page() {
-  const { demandas } = useDemandas();
+  const { demandas: allDemandas } = useDemandas();
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+  const demandas = allDemandas.filter((d) => demandaInRange(d, range));
+
   const [weekStart, setWeekStart] = React.useState(() => startOfWeek(new Date(2026, 4, 17)));
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 6);
@@ -73,7 +77,9 @@ function Page() {
       <PageHeader
         title="Calendário 2026"
         subtitle="Visão anual com filtro semanal. Navegue pelas semanas para focar a operação."
+        actions={<PeriodFilter value={period} onChange={setPeriod} />}
       />
+
 
       <div className="neo-card mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5">
         <div>
