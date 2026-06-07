@@ -3,6 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { useDemandas } from "@/lib/store";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/calendario")({
   head: () => ({
