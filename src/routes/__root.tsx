@@ -9,8 +9,11 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar, MobileDrawer } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { Menu } from "lucide-react";
+import * as React from "react";
+
 
 function NotFoundComponent() {
   return (
@@ -96,12 +99,35 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background text-foreground">
         <AppSidebar />
+        <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
+
+        {/* Mobile top bar */}
+        <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur-xl md:hidden">
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface/60 text-foreground transition-colors hover:bg-secondary"
+            aria-label="Abrir menu"
+          >
+            <Menu className="h-5 w-5" strokeWidth={1.75} />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground text-background">
+              <span className="text-[11px] font-semibold">D</span>
+            </div>
+            <span className="text-sm font-semibold tracking-tight">
+              Demandas
+            </span>
+          </div>
+          <div className="w-10" />
+        </header>
+
         <main className="md:pl-64">
-          <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:px-10 md:py-14">
             <Outlet />
           </div>
         </main>
@@ -110,3 +136,4 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+

@@ -1,7 +1,15 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { FileText, ImageIcon, Film, Link as LinkIcon, FileType } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { useDemandas } from "@/lib/store";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/arquivos")({
   head: () => ({
@@ -28,7 +36,11 @@ function iconFor(tipo: string) {
 }
 
 function Page() {
-  const { demandas } = useDemandas();
+  const { demandas: allDemandas } = useDemandas();
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+  const demandas = allDemandas.filter((d) => demandaInRange(d, range));
+
   const files = demandas.flatMap((d) =>
     (d.arquivos ?? []).map((a) => ({ ...a, demanda: d.titulo, setor: d.setor })),
   );
@@ -38,7 +50,9 @@ function Page() {
       <PageHeader
         title="Arquivos"
         subtitle="Tudo o que está anexado às demandas — PSD, PNG, JPG, MP4, PDF, Figma e links."
+        actions={<PeriodFilter value={period} onChange={setPeriod} />}
       />
+
 
       {files.length === 0 ? (
         <div className="neo-card flex flex-col items-center rounded-2xl px-6 py-24 text-center">

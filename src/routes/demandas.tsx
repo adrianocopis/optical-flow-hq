@@ -25,6 +25,13 @@ import {
 } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  PeriodFilter,
+  defaultPeriod,
+  computeRange,
+  demandaInRange,
+} from "@/components/period-filter";
+
 
 export const Route = createFileRoute("/demandas")({
   head: () => ({
@@ -57,8 +64,12 @@ function Page() {
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<Demanda | null>(null);
 
+  const [period, setPeriod] = React.useState(defaultPeriod);
+  const range = computeRange(period.preset, period);
+
   const filtered = React.useMemo(() => {
     let r = demandas.filter((d) => {
+      if (!demandaInRange(d, range)) return false;
       if (filterSetor !== "todos" && d.setor !== filterSetor) return false;
       if (filterStatus !== "todos" && d.status !== filterStatus) return false;
       if (filterPrior !== "todos" && d.prioridade !== filterPrior) return false;
@@ -74,7 +85,8 @@ function Page() {
       return prOrder.indexOf(a.prioridade) - prOrder.indexOf(b.prioridade);
     });
     return r;
-  }, [demandas, q, filterSetor, filterStatus, filterPrior, sortBy]);
+  }, [demandas, q, filterSetor, filterStatus, filterPrior, sortBy, range]);
+
 
   return (
     <>
@@ -82,16 +94,20 @@ function Page() {
         title="Demandas"
         subtitle="Sistema completo de gerenciamento. Filtros, prioridades, status e upload de arquivos."
         actions={
-          <Button
-            onClick={() => {
-              setEditing(null);
-              setOpen(true);
-            }}
-            className="rounded-full"
-          >
-            <Plus className="h-4 w-4" /> Nova demanda
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <PeriodFilter value={period} onChange={setPeriod} />
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setOpen(true);
+              }}
+              className="rounded-full"
+            >
+              <Plus className="h-4 w-4" /> Nova demanda
+            </Button>
+          </div>
         }
+
       />
 
       {/* Toolbar */}
