@@ -22,8 +22,9 @@ export const Route = createFileRoute("/demandas-fixas")({
 });
 
 function Page() {
-  const { metas, update } = useMetas();
+  const { metas, update, add, remove } = useMetas();
   const [period, setPeriod] = React.useState(defaultPeriod);
+  const [openAdd, setOpenAdd] = React.useState(false);
   const semanais = metas.filter((m) => m.periodo === "semanal");
   const mensais = metas.filter((m) => m.periodo !== "semanal");
 
@@ -32,24 +33,42 @@ function Page() {
       <PageHeader
         title="Demandas Fixas"
         subtitle="Metas recorrentes — progresso visual, metas superadas e bloqueios."
-        actions={<PeriodFilter value={period} onChange={setPeriod} />}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <PeriodFilter value={period} onChange={setPeriod} />
+            <Button onClick={() => setOpenAdd(true)} className="rounded-full">
+              <Plus className="h-4 w-4" /> Nova meta
+            </Button>
+          </div>
+        }
       />
 
       {metas.length === 0 ? (
-        <EmptyMetas />
+        <EmptyMetas onAdd={() => setOpenAdd(true)} />
       ) : (
         <>
-          <Group title="Semanais" metas={semanais} update={update} />
+          <Group title="Semanais" metas={semanais} update={update} remove={remove} />
           <div className="mt-10">
-            <Group title="Mensais" metas={mensais} update={update} />
+            <Group title="Mensais" metas={mensais} update={update} remove={remove} />
           </div>
         </>
+      )}
+
+      {openAdd && (
+        <NovaMetaDialog
+          onClose={() => setOpenAdd(false)}
+          onSave={(m) => {
+            add(m);
+            toast.success("Meta criada");
+            setOpenAdd(false);
+          }}
+        />
       )}
     </>
   );
 }
 
-function EmptyMetas() {
+function EmptyMetas({ onAdd }: { onAdd: () => void }) {
   return (
     <div className="neo-card flex flex-col items-center rounded-2xl px-6 py-20 text-center">
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
@@ -59,9 +78,13 @@ function EmptyMetas() {
       <p className="mt-1 max-w-sm text-xs text-muted-foreground">
         Cadastre metas recorrentes para acompanhar o progresso aqui.
       </p>
+      <Button onClick={onAdd} className="mt-5 rounded-full">
+        <Plus className="h-4 w-4" /> Criar primeira meta
+      </Button>
     </div>
   );
 }
+
 
 
 function Group({
