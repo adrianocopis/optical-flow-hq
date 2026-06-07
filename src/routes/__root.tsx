@@ -9,8 +9,11 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar, MobileDrawer } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { Menu } from "lucide-react";
+import * as React from "react";
+
 
 function NotFoundComponent() {
   return (
