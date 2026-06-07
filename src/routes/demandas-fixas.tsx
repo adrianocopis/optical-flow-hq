@@ -168,7 +168,7 @@ function MetaCard({
         )}
       </div>
 
-      <div className="mt-5 flex items-center justify-between">
+      <div className="mt-5 flex items-center justify-between gap-2">
         <div className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 p-1">
           <button
             onClick={() => update(m.id, { realizado: Math.max(0, m.realizado - 1) })}
@@ -176,7 +176,17 @@ function MetaCard({
           >
             <Minus className="h-3 w-3" />
           </button>
-          <span className="px-2 text-xs tabular-nums">{m.realizado}</span>
+          <input
+            type="number"
+            min={0}
+            value={m.realizado}
+            onChange={(e) =>
+              update(m.id, {
+                realizado: Math.max(0, Number(e.target.value) || 0),
+              })
+            }
+            className="w-14 bg-transparent text-center text-xs tabular-nums outline-none"
+          />
           <button
             onClick={() => update(m.id, { realizado: m.realizado + 1 })}
             className="rounded-full p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -194,6 +204,7 @@ function MetaCard({
           {m.bloqueada ? "Remover bloqueio" : "Sinalizar bloqueio"}
         </button>
       </div>
+
 
       {(showBloqueio || m.bloqueada) && !m.bloqueada && (
         <BloqueioForm m={m} update={update} onClose={() => setShowBloqueio(false)} />
